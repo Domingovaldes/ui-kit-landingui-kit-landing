@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexUI Kit — Componentes para Landing Pages</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --neon: #00f5c4;
+    --electric: #7b61ff;
+    --deep: #050814;
+    --surface: #0d1224;
+    --card: #111827;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: #e2e8f0;
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .brand { font-family: 'Syne', sans-serif; }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(123,97,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,97,255,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-ball {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5, 8, 20, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(123,97,255,0.15);
+  }
+
+  .nav-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+
+  .nav-logo span { color: var(--neon); }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #fff; }
+
+  .btn-primary {
+    background: var(--electric);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: #6a4fff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 30px rgba(123,97,255,0.4);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline:hover {
+    border-color: var(--neon);
+    color: var(--neon);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0,245,196,0.1);
+    border: 1px solid rgba(0,245,196,0.3);
+    color: var(--neon);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #fff 30%, var(--electric) 70%, var(--neon) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .hero-preview {
+    margin-top: 5rem;
+    position: relative;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .browser-bar {
+    background: #1e2a3a;
+    border-radius: 12px 12px 0 0;
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom: none;
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green { background: #28c840; }
+
+  .browser-url {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-left: 0.5rem;
+  }
+
+  .browser-content {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    overflow: hidden;
+  }
+
+  .mini-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: left;
+  }
+
+  .mini-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .mini-card h4 { font-size: 0.75rem; font-weight: 600; margin-bottom: 0.3rem; color: #fff; }
+  .mini-card p { font-size: 0.65rem; color: #64748b; line-height: 1.5; }
+
+  /* FEATURES */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: #64748b;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 500px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--electric), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(123,97,255,0.3);
+    transform: translateY(-4px);
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: #fff;
+  }
+
+  .feature-card p { color: #64748b; font-size: 0.9rem; line-height: 1.6; }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .pricing-card.featured {
+    background: linear-gradient(135deg, rgba(123,97,255,0.15), rgba(0,245,196,0.05));
+    border-color: var(--electric);
+    transform: scale(1.03);
+  }
+
+  .pricing-card:hover { transform: translateY(-4px); }
+  .pricing-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--electric);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .pricing-plan { font-size: 0.85rem; color: #64748b; font-weight: 500; margin-bottom: 1rem; }
+
+  .pricing-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .pricing-price span { font-size: 1.2rem; color: #64748b; vertical-align: top; margin-top: 0.8rem; display: inline-block; }
+  .pricing-period { color: #64748b; font-size: 0.85rem; margin-bottom: 2rem; }
+
+  .pricing-features { list-style: none; margin-bottom: 2rem; }
+  .pricing-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .pricing-features li:last-child { border-bottom: none; }
+  .check { color: var(--neon); font-size: 1rem; }
+  .cross { color: #475569; }
+
+  .btn-plan {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-plan-outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .btn-plan-outline:hover { border-color: var(--electric); color: var(--electric); }
+
+  .btn-plan-filled {
+    background: var(--electric);
+    color: #fff;
+  }
+
+  .btn-plan-filled:hover {
+    background: #6a4fff;
+    box-shadow: 0 0 30px rgba(123,97,255,0.4);
+  }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+
+  .testimonial-card:hover {
+    border-color: rgba(123,97,255,0.2);
+    transform: translateY(-3px);
+  }
+
+  .stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+
+  .testimonial-text {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .author-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
+  .author-role { font-size: 0.8rem; color: #64748b; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand p {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-top: 1rem;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .footer-col a {
+    display: block;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--neon); }
+
+  .footer-bottom {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-bottom p { color: #475569; font-size: 0.85rem; }
+
+  .social-links { display: flex; gap: 1rem; }
+  .social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .social-link:hover {
+    background: rgba(123,97,255,0.15);
+    border-color: var(--electric);
+    color: var(--electric);
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(123,97,255,0.3), transparent);
+    margin: 0;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate { animation: fadeUp 0.7s ease forwards; }
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .browser-content { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: scale(1); }
+  }
+
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo brand">Nex<span>UI</span></div>
+  <div class="nav-links">
+    <a href="#features">Componentes</a>
+    <a href="#pricing">Precios</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="https://valdescape0.gumroad.com/l/wuolaj" class="btn-primary">Comprar ahora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow-ball" style="width:600px;height:600px;background:var(--electric);top:-200px;left:-100px;"></div>
+  <div class="glow-ball" style="width:400px;height:400px;background:var(--neon);bottom:-100px;right:-100px;"></div>
+
+  <div style="position:relative;z-index:1;max-width:900px;">
+    <div class="badge animate delay-1">✦ UI Kit para Devs · 40+ Componentes</div>
+    <h1 class="animate delay-2">
+      Construye landing pages<br>
+      <span class="gradient-text">que convierten.</span>
+    </h1>
+    <p class="animate delay-3">Componentes HTML + Tailwind CSS listos para usar. Copia, pega y lanza tu proyecto en horas, no en semanas.</p>
+    <div class="hero-buttons animate delay-4">
+      <a href="#pricing" class="btn-primary">Obtener el Kit — $29</a>
+      <a href="#features" class="btn-outline">Ver componentes</a>
+    </div>
+
+    <div class="hero-preview animate delay-4" style="margin-top:4rem;">
+      <div class="browser-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="browser-url">nexui.kit / components</div>
+      </div>
+      <div class="browser-content">
+        <div class="mini-card">
+          <div class="mini-card-icon" style="background:rgba(123,97,255,0.2);">🎯</div>
+          <h4>Hero Section</h4>
+          <p>3 variantes listas para personalizar con tu copy.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon" style="background:rgba(0,245,196,0.15);">💳</div>
+          <h4>Pricing Cards</h4>
+          <p>Planes mensuales / anuales con toggle incluido.</p>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-icon" style="background:rgba(251,191,36,0.15);">⭐</div>
+          <h4>Testimonials</h4>
+          <p>Grid de reseñas con avatares y calificación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FEATURES -->
+<section id="features" style="padding:6rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="max-width:540px;">
+      <div class="section-label">Componentes incluidos</div>
+      <h2 class="section-title">Todo lo que necesitas para lanzar rápido</h2>
+      <p class="section-sub">Cada componente está optimizado para conversión, accesibilidad y performance. Solo copia el código y personaliza.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(123,97,255,0.15);">🎯</div>
+        <h3>Hero Sections</h3>
+        <p>3 variantes de hero con headline, subtext, CTA y preview. Listas para convertir desde el primer scroll.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(0,245,196,0.1);">⚡</div>
+        <h3>Feature Grids</h3>
+        <p>Secciones de características en grid 2, 3 y 4 columnas. Con íconos, títulos y descripciones editables.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(251,191,36,0.1);">💳</div>
+        <h3>Pricing Tables</h3>
+        <p>Tablas de precios con 2 y 3 planes. Toggle mensual/anual incluido. Con badges de "Más popular".</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(239,68,68,0.1);">⭐</div>
+        <h3>Testimonials</h3>
+        <p>Grids de testimonios, sliders y cards de reviews con avatares, nombres y calificaciones en estrellas.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(16,185,129,0.1);">📋</div>
+        <h3>CTA Sections</h3>
+        <p>Secciones de llamada a la acción centradas y de ancho completo. Con newsletter form incluido.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(59,130,246,0.1);">🔗</div>
+        <h3>Navbars & Footers</h3>
+        <p>Navegación sticky con menú mobile y 3 variantes de footer responsivo con links y redes sociales.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PRICING -->
+<section id="pricing" style="padding:6rem 2rem;text-align:center;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-label">Precios</div>
+    <h2 class="section-title">Simple. Sin sorpresas.</h2>
+    <p class="section-sub" style="margin:0 auto 1rem;">Pago único, tuyo para siempre. Sin suscripciones ni licencias complicadas.</p>
+
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Starter</div>
+        <div class="pricing-price"><span>$</span>19</div>
+        <div class="pricing-period">pago único</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 15 componentes HTML</li>
+          <li><span class="check">✓</span> Tailwind CSS incluido</li>
+          <li><span class="check">✓</span> 1 tema de color</li>
+          <li><span class="check">✓</span> Licencia personal</li>
+          <li><span class="cross">✗</span> Figma source files</li>
+          <li><span class="cross">✗</span> Soporte prioritario</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline">Comprar Starter</button>
+      </div>
+
+      <!-- Pro (featured) -->
+      <div class="pricing-card featured">
+        <div class="popular-badge">Más popular</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price"><span>$</span>29</div>
+        <div class="pricing-period">pago único</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 40+ componentes HTML</li>
+          <li><span class="check">✓</span> Tailwind CSS incluido</li>
+          <li><span class="check">✓</span> 3 temas de color</li>
+          <li><span class="check">✓</span> Licencia comercial</li>
+          <li><span class="check">✓</span> Figma source files</li>
+          <li><span class="cross">✗</span> Soporte prioritario</li>
+        </ul>
+        <button class="btn-plan btn-plan-filled">Comprar Pro</button>
+      </div>
+
+      <!-- Agency -->
+      <div class="pricing-card">
+        <div class="pricing-plan">Agency</div>
+        <div class="pricing-price"><span>$</span>79</div>
+        <div class="pricing-period">pago único</div>
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> 40+ componentes HTML</li>
+          <li><span class="check">✓</span> Tailwind CSS incluido</li>
+          <li><span class="check">✓</span> Temas ilimitados</li>
+          <li><span class="check">✓</span> Licencia para clientes</li>
+          <li><span class="check">✓</span> Figma source files</li>
+          <li><span class="check">✓</span> Soporte prioritario</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline">Comprar Agency</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="padding:6rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="max-width:540px;">
+      <div class="section-label">Testimonios</div>
+      <h2 class="section-title">Devs que ya lo usan</h2>
+      <p class="section-sub">Más de 300 desarrolladores han lanzado sus proyectos con NexUI Kit.</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Lancé el sitio de mi cliente en un día. Los componentes son limpios y el código es fácil de entender. Vale cada centavo."</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:rgba(123,97,255,0.3);color:var(--electric);">MR</div>
+          <div>
+            <div class="author-name">Miguel Rodríguez</div>
+            <div class="author-role">Freelance Developer · CDMX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"El UI Kit me ahorró al menos 20 horas de trabajo. Los componentes de pricing son exactamente lo que necesitaba para mi SaaS."</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:rgba(0,245,196,0.15);color:var(--neon);">SC</div>
+          <div>
+            <div class="author-name">Sofía Castro</div>
+            <div class="author-role">Founder · StartupMX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Lo compré el viernes, el lunes ya tenía la landing de mi cliente lista. El código es limpio y bien documentado. Totalmente recomendado."</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:rgba(251,191,36,0.15);color:#fbbf24;">AP</div>
+          <div>
+            <div class="author-name">Andrés Pérez</div>
+            <div class="author-role">Web Developer · Guadalajara</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CTA -->
+<section style="padding:6rem 2rem;text-align:center;position:relative;overflow:hidden;">
+  <div class="glow-ball" style="width:500px;height:500px;background:var(--electric);top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.08;"></div>
+  <div style="position:relative;z-index:1;">
+    <h2 class="section-title">¿Listo para lanzar tu proyecto?</h2>
+    <p style="color:#64748b;font-size:1.1rem;margin:1rem auto 2.5rem;max-width:480px;line-height:1.7;">Únete a los devs que ya están construyendo más rápido con NexUI Kit.</p>
+    <a href="#pricing" class="btn-primary" style="font-size:1rem;padding:0.9rem 2.5rem;">Obtener NexUI Kit — $29</a>
+    <p style="color:#475569;font-size:0.8rem;margin-top:1rem;">✓ Pago único · ✓ Actualizaciones incluidas · ✓ Garantía 30 días</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo brand" style="font-size:1.3rem;">Nex<span style="color:var(--neon);">UI</span></div>
+      <p>UI Kit de componentes HTML + Tailwind CSS para developers que quieren lanzar rápido sin sacrificar diseño.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Producto</h4>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Componentes</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Precios</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Changelog</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Roadmap</a>
+    </div>
+    <div class="footer-col">
+      <h4>Recursos</h4>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Documentación</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Ejemplos</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Tutoriales</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Blog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Términos de uso</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Privacidad</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Licencia</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj">Soporte</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 NexUI Kit. Hecho con ☕ para developers.</p>
+    <div class="social-links">
+      <a href="https://valdescape0.gumroad.com/l/wuolaj" class="social-link">𝕏</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj" class="social-link">in</a>
+      <a href="https://valdescape0.gumroad.com/l/wuolaj" class="social-link">gh</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
